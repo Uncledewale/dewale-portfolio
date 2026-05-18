@@ -150,54 +150,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Contact Form: AJAX submission to Netlify Forms
-    const contactForm = document.getElementById('contact-form');
-    if (contactForm) {
-        contactForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const submitBtn = contactForm.querySelector('button[type="submit"]');
-            const successMsg = document.getElementById('form-success');
-            const originalText = submitBtn ? submitBtn.textContent : 'Send Message';
-
-            if (submitBtn) {
-                submitBtn.textContent = 'Sending...';
-                submitBtn.disabled = true;
-            }
-
-            // Encode all form fields including hidden form-name & bot-field
-            const formData = new FormData(contactForm);
-            const encoded = new URLSearchParams(formData).toString();
-
-            try {
-                const response = await fetch('/', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: encoded
-                });
-
-                if (response.ok) {
-                    // Hide form, show success message inline
-                    contactForm.style.display = 'none';
-                    if (successMsg) successMsg.style.display = 'block';
-                    contactForm.reset();
-                } else {
-                    console.error('Netlify form error:', response.status, response.statusText);
-                    showNotification('Something went wrong. Please try again.', true);
-                    if (submitBtn) {
-                        submitBtn.textContent = originalText;
-                        submitBtn.disabled = false;
-                    }
-                }
-            } catch (err) {
-                console.error('Form submission error:', err);
-                showNotification('Network error. Please check your connection and try again.', true);
-                if (submitBtn) {
-                    submitBtn.textContent = originalText;
-                    submitBtn.disabled = false;
-                }
-            }
-        });
-    }
+    // Contact form uses native Netlify Forms submission
+    // Form action="/success.html" is handled by Netlify at the CDN level
 
 });
+
