@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Contact Form: AJAX submission to Netlify Forms (no page redirect needed)
+    // Contact Form: AJAX submission to Netlify Forms
     const contactForm = document.getElementById('contact-form');
     if (contactForm) {
         contactForm.addEventListener('submit', async (e) => {
@@ -165,13 +165,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 submitBtn.disabled = true;
             }
 
+            // Encode all form fields including hidden form-name & bot-field
             const formData = new FormData(contactForm);
+            const encoded = new URLSearchParams(formData).toString();
 
             try {
                 const response = await fetch('/', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: new URLSearchParams(formData).toString()
+                    body: encoded
                 });
 
                 if (response.ok) {
@@ -180,12 +182,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (successMsg) successMsg.style.display = 'block';
                     contactForm.reset();
                 } else {
-                    alert('Something went wrong. Please try again.');
+                    console.error('Netlify form error:', response.status, response.statusText);
+                    showNotification('Something went wrong. Please try again.', true);
+                    if (submitBtn) {
+                        submitBtn.textContent = originalText;
+                        submitBtn.disabled = false;
+                    }
                 }
             } catch (err) {
                 console.error('Form submission error:', err);
-                alert('Network error. Please check your connection and try again.');
-            } finally {
+                showNotification('Network error. Please check your connection and try again.', true);
                 if (submitBtn) {
                     submitBtn.textContent = originalText;
                     submitBtn.disabled = false;
