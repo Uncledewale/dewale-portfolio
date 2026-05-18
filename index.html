@@ -181,14 +181,13 @@
                         <h3 style="color: #FF6B00; font-size: 2rem; margin-bottom: 1rem;">✅ Message Sent!</h3>
                         <p style="color: #aaa; font-size: 1.1rem;">Thank you! I'll get back to you as soon as possible.</p>
                     </div>
-                    <form id="contact-form" class="contact-form" action="https://formsubmit.co/dewaleolaniyi@gmail.com" method="POST">
-                        <!-- FormSubmit.co configuration -->
-                        <input type="hidden" name="_next" value="https://dewale-portfolio.netlify.app/success.html">
-                        <input type="hidden" name="_subject" value="New message from your portfolio!">
-                        <input type="hidden" name="_captcha" value="false">
-                        <input type="hidden" name="_template" value="table">
+                    <form id="contact-form" class="contact-form">
+                        <!-- Web3Forms configuration -->
+                        <input type="hidden" name="access_key" value="c5dcb453-225d-49e6-8516-ee66526ef1a6">
+                        <input type="hidden" name="subject" value="New message from your portfolio!">
+                        <input type="hidden" name="from_name" value="Dewale Portfolio">
                         <!-- Honeypot spam protection -->
-                        <input type="text" name="_honey" style="display:none">
+                        <input type="checkbox" name="botcheck" style="display:none">
                         <div class="form-group">
                             <input type="text" id="name" name="name" placeholder="Your Name" required>
                         </div>
@@ -198,7 +197,7 @@
                         <div class="form-group">
                             <textarea id="message" name="message" rows="5" placeholder="Your Message" required></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary">Send Message</button>
+                        <button type="submit" id="submit-btn" class="btn btn-primary">Send Message</button>
                     </form>
                 </div>
             </div>

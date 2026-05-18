@@ -150,8 +150,52 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Contact form uses native Netlify Forms submission
-    // Form action="/success.html" is handled by Netlify at the CDN level
+    // Contact Form: Web3Forms AJAX submission
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const submitBtn = document.getElementById('submit-btn');
+            const successMsg = document.getElementById('form-success');
+            const originalText = submitBtn ? submitBtn.textContent : 'Send Message';
+
+            if (submitBtn) {
+                submitBtn.textContent = 'Sending...';
+                submitBtn.disabled = true;
+            }
+
+            const formData = new FormData(contactForm);
+
+            try {
+                const response = await fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    contactForm.style.display = 'none';
+                    if (successMsg) successMsg.style.display = 'block';
+                    contactForm.reset();
+                } else {
+                    console.error('Web3Forms error:', data);
+                    showNotification(data.message || 'Something went wrong. Please try again.', true);
+                    if (submitBtn) {
+                        submitBtn.textContent = originalText;
+                        submitBtn.disabled = false;
+                    }
+                }
+            } catch (err) {
+                console.error('Form submission error:', err);
+                showNotification('Network error. Please check your connection.', true);
+                if (submitBtn) {
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                }
+            }
+        });
+    }
 
 });
-
